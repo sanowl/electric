@@ -1,26 +1,24 @@
-import { FileWriter } from './classes'
-import {
-  writeArgTypeFiles,
-  writeInputTypeFiles,
-  writeModelFiles,
-} from './functions'
-import { CreateOptions } from './types'
+import { FileWriter } from './classes';
+import { writeArgTypeFiles, writeInputTypeFiles, writeModelFiles } from './functions';
+import { CreateOptions } from './types';
 
 export const generateMultipleFiles = ({ dmmf, path }: CreateOptions) => {
   // Create the index file
-  new FileWriter().createFile(`${path}/index.ts`, ({ writeExport }) => {
+  const fileWriter = new FileWriter();
+  fileWriter.createFile(`${path}/index.ts`, ({ writeExport }) => {
     if (dmmf.generatorConfig.createModelTypes) {
-      writeExport('*', './modelSchema')
+      writeExport('*', './modelSchema');
     }
 
-    writeExport('*', `./${dmmf.generatorConfig.inputTypePath}`)
+    writeExport('*', `./${dmmf.generatorConfig.inputTypePath}`);
 
     if (dmmf.generatorConfig.createInputTypes) {
-      writeExport('*', `./${dmmf.generatorConfig.outputTypePath}`)
+      writeExport('*', `./${dmmf.generatorConfig.outputTypePath}`);
     }
-  })
+  });
 
-  writeModelFiles({ path, dmmf })
-  writeInputTypeFiles({ path, dmmf })
-  writeArgTypeFiles({ path, dmmf })
-}
+  // Write model, input type, and argument type files
+  writeModelFiles({ path, dmmf });
+  writeInputTypeFiles({ path, dmmf });
+  writeArgTypeFiles({ path, dmmf });
+};
